@@ -1,5 +1,6 @@
 const express = require('express')
 const morgan = require('morgan')
+const bodyParser = require('body-parser')
 const cors = require('cors')
 const api_users = require('../api/users')
 module.exports.start = (options)=>{
@@ -9,7 +10,8 @@ module.exports.start = (options)=>{
 
         //  Create the app, add some logging.
         var app = express();
-        
+        app.use(bodyParser.urlencoded({ extended: false }))
+        app.use(bodyParser.json())
         app.use(morgan('dev'));
         app.use(cors())
         //  Add the APIs to the app.

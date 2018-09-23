@@ -1,12 +1,12 @@
 const mysql = require('mysql')
-
+const bcrypt = require('bcrypt')
 class Repository{
     constructor(connectionSettings){
         this.connectionSettings = connectionSettings
         this.connection = mysql.createConnection(this.connectionSettings)
     }
 
-    getProducts(){
+    getUsers(){
         return new Promise((resolve,reject)=>{
             this.connection.query("SELECT * FROM USUARIO",(err,result)=>{
                 if(err){
@@ -24,7 +24,7 @@ class Repository{
         }) 
     }
 
-    getProductByid(id){
+    getUserByid(id){
         return new Promise((resolve,reject)=>{
             this.connection.query("SELECT * FROM USUARIO WHERE idUSUARIO = ?",[id],(err,result)=>{
                 if(err){
@@ -43,6 +43,58 @@ class Repository{
                 })[0])
             })
         }) 
+    }
+
+    login(username,password){
+        return new Promise((resolve,reject)=>{
+            this.connection.query("SELECT * FROM USUARIO WHERE username = ?",[username],(err,result)=>{
+                if(err){
+                    return reject(new Error('A ocurrido un error: '+err))
+                }
+                if(result.length === 0){
+                    resolve({message:"Usuario no registrado"})
+                }
+                else{
+                    let user = result.map(user=>{
+                        return{
+                            id:user.idUSUARIO,
+                            username:user.username,
+                            password:user.password,
+                            role:user.role
+                        }
+                    })[0]
+                    bcrypt.compare(password,user.password,(err,valid)=>{
+                        if(valid){
+                            resolve({message:"Login con exito!"})
+                        }
+                        else  resolve({message:"Contraseña incorrecta"})
+                    })
+                }
+            })
+        }) 
+    }
+
+    register(user){
+        return new Promise((resolve,reject)=>{
+            bcrypt.genSalt(10,(err,salt)=>{
+                if(err) return console.log(`Error: ${err}`)
+                bcrypt.hash(user.password,salt,(err,hash)=>{
+                    if(err) return console.log(`Error: ${err}`)
+                    user.password = hash
+                    this.connection.query("INSERT INTO USUARIO SET ?",user,(err,result)=>{
+                        if(err){
+                            return reject(new Error('A ocurrido un error: '+err))
+                        }
+                        else{
+                            resolve({message:"Se inserto en la base de datos!"});
+                            
+                        }
+                        
+                    })
+                })
+            })
+            
+        })
     }
 
     disconnect(){
