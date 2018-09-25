@@ -1,6 +1,8 @@
 'use strict'
+const isAuth = require('../middlewares/auth')
+const jwt = require('../services/jwt')
 module.exports = (app,options)=>{
-    app.get('/users',(req,res,next)=>{
+    app.get('/users',isAuth,(req,res,next)=>{
         options.repository.getUsers().then(users=>{
             res.status(200).json(users)
         })
@@ -8,7 +10,7 @@ module.exports = (app,options)=>{
     })
 
 
-    app.get('/search/:id',(req,res,next)=>{
+    app.get('/search/:id',isAuth,(req,res,next)=>{
         let id = req.params.id
         if(!id){
             throw new Error("Se espero un id en la ruta")
@@ -23,7 +25,13 @@ module.exports = (app,options)=>{
     app.post('/login',(req,res,next)=>{
         let user = req.body
         options.repository.login(user.username,user.password).then(resp=>{
-            res.status(200).json(resp)
+            if(resp.token){
+                let payload = jwt.decodeToken(resp.token)
+                resp.user = payload
+                res.status(200).json(resp)
+            }
+            else res.status(200).json(resp)
+
         })
         .catch(next)
     })

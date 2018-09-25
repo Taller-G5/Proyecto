@@ -1,5 +1,6 @@
 const mysql = require('mysql')
 const bcrypt = require('bcrypt')
+const jwt = require('../services/jwt')
 class Repository{
     constructor(connectionSettings){
         this.connectionSettings = connectionSettings
@@ -21,7 +22,7 @@ class Repository{
                     }
                 }))
             })
-        }) 
+        })
     }
 
     getUserByid(id){
@@ -42,7 +43,7 @@ class Repository{
                     }
                 })[0])
             })
-        }) 
+        })
     }
 
     login(username,password){
@@ -52,7 +53,7 @@ class Repository{
                     return reject(new Error('A ocurrido un error: '+err))
                 }
                 if(result.length === 0){
-                    resolve({message:"Usuario no registrado"})
+                    resolve({success:false,message:"Usuario no registrado"})
                 }
                 else{
                     let user = result.map(user=>{
@@ -65,13 +66,14 @@ class Repository{
                     })[0]
                     bcrypt.compare(password,user.password,(err,valid)=>{
                         if(valid){
-                            resolve({message:"Login con exito!"})
+                            const token = jwt.createToken(user)
+                            resolve({success:true,token})
                         }
-                        else  resolve({message:"Contraseña incorrecta"})
+                        else resolve({success:false,message:"Contraseña incorrecta"})
                     })
                 }
             })
-        }) 
+        })
     }
 
     register(user){
@@ -87,13 +89,13 @@ class Repository{
                         }
                         else{
                             resolve({message:"Se inserto en la base de datos!"});
-                            
+
                         }
-                        
+
                     })
                 })
             })
-            
+
         })
     }
 

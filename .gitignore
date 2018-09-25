@@ -1,1 +1,5 @@
 users-service/node_modules/
+ventas-service/node_modules/
+products-service/node_modules/
+detalles-service/node_modules/
+client/node_modules/

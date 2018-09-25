@@ -1,31 +1,65 @@
 version: '3'
 
-services: 
+services:
   website:
     image: nginx:latest
-    depends_on: 
+    depends_on:
       - user
     ports:
       - "80:80"
     volumes:
-      - ./client:/var/www/html
+      - ./client/dist:/var/www/html
       - ./default.conf:/etc/nginx/conf.d/default.conf
-    
+
 
   user:
     build: ./users-service
-    depends_on: 
+    depends_on:
       - db
-    environment: 
+    environment:
       - DATABASE_HOST=db
     volumes:
       - ./users-service:/usr/src/app
-    ports: 
+    ports:
       - 5001:5001
+
+  product:
+    build: ./products-service
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+    volumes:
+      - ./products-service:/usr/src/app
+    ports:
+      - 5002:5002
+
+  venta:
+    build: ./ventas-service
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+    volumes:
+      - ./ventas-service:/usr/src/app
+    ports:
+      - 5003:5003
+
+  detalle:
+    build: ./detalles-service
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+    volumes:
+      - ./detalles-service:/usr/src/app
+    ports:
+      - 5004:5004
+
 
   db:
     build: ./db
-    environment: 
+    environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
     healthcheck:
       test: "exit 0"

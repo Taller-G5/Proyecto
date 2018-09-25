@@ -6,6 +6,6 @@ module.exports={
         user:'axel',
         password:'admin',
         port:3306
-    }
+    },
+    SECRET : "Pr0y3ct0F4rW4c1@"
 }
-
