@@ -12,10 +12,10 @@ class Repository{
                 if(err){
                     return reject(new Error('A ocurrido un error: '+err))
                 }
-                resolve(result.map(productos=>{
+                resolve(result.map(venta=>{
                     return{
                       id:venta.idVENTA,
-                      idUsuario:venta.idUsuario,
+                      idUsuario:venta.idUSUARIO,
                       fecha_venta:venta.fecha_venta
                     }
                 }))
@@ -86,6 +86,37 @@ class Repository{
                 })
               }
               else{
+                detalles.forEach(_detalle => {
+                  this.connection.query("SELECT * FROM PRODUCTO WHERE idPRODUCTO = ?",[_detalle.idPRODUCTO],(err,result)=>{
+                    if(err){
+                      return reject(new Error('A ocurrido un error: '+err))
+                    }
+                    let product = result.map(producto=>{
+                        return{
+                          id:producto.idPRODUCTO,
+                          nombre:producto.nombre,
+                          precio:producto.precio,
+                          stock:producto.stock
+                        }
+                    })[0]
+                    let stock_disponible = (product.stock - _detalle.cantidad)
+                    if(stock_disponible<0){
+                      return this.connection.rollback(()=>{
+                        resolve({success:true,message:`Producto ${product.nombre} con stock insuficiente`})
+                      })
+                    }
+                    else{
+                      this.connection.query("UPDATE PRODUCTO SET stock = ? WHERE idPRODUCTO = ?",[stock_disponible,_detalle.idPRODUCTO],(err,result)=>{
+                        if(err){
+                          return reject(new Error('A ocurrido un error: '+err))
+                        }
+                        else{
+                          console.log("Producto actualizado")
+                        }
+                      })
+                    }
+                  })
+                });
                 this.connection.query(querys.detalles,[detalles.map(detalle =>[results.insertId,detalle.idPRODUCTO,detalle.cantidad,detalle.precio])],(err,results)=>{
                   if(err){
                     return this.connection.rollback(()=>{
@@ -93,6 +124,7 @@ class Repository{
                     })
                   }
                   else{
+
                     this.connection.commit(err=>{
                       if(err){
                         return this.connection.rollback(()=>{
