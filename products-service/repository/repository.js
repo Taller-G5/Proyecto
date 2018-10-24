@@ -59,6 +59,18 @@ class Repository{
         })
     }
 
+    update(product){
+        return new Promise((resolve,reject)=>{
+            this.connection.query(querys.update,[product.nombre,product.precio,product.stock,product.id],(err,result)=>{
+                if(err){
+                    return reject(new Error('A ocurrido un error: '+ err))
+                }
+                else{
+                    resolve({success:true,message:"Producto Actualizado"})
+                }
+            })
+        })
+    }
 
     delete(id){
         return new Promise((resolve,reject)=>{

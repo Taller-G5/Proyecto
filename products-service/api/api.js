@@ -28,6 +28,13 @@ module.exports = (app,options)=>{
       .catch(next)
     })
 
+    app.put('/update',(req,res,next)=>{
+        let product = req.body
+        options.repository.update(product).then(resp=>{
+            res.status(200).json(resp)
+        })
+        .catch(next)
+    })
 
     app.delete('/delete/:id',(req,res,next)=>{
         let id = req.params.id
