@@ -7,10 +7,12 @@ import 'font-awesome/css/font-awesome.css';
 import './theme/default.styl';
 import VeeValidate from 'vee-validate';
 import Truncate from 'lodash.truncate';
+import HighchartsVue from 'highcharts-vue'
 Vue.config.productionTip = false;
 // Helpers
 // Global filters
 Vue.filter('truncate', Truncate);
+Vue.use(HighchartsVue)
 Vue.use(VeeValidate, { fieldsBagName: 'formFields' });
 Vue.use(Vuetify, {
   options: {

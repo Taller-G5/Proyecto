@@ -6,6 +6,12 @@ export default [
     }
   },
   {
+    name: 'PERFIL',
+    callback: function (e) {
+      this.$router.push({ name: 'perfil' });
+    }
+  },
+  {
     name: 'APP_LOGOUT',
     callback: function (e) {
       this.snackbar = {

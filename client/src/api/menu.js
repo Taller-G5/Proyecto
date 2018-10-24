@@ -6,16 +6,12 @@ const Menu =  [
     icon: 'dashboard',
     name: 'Dashboard',
   },  
-  { header: 'Gestion de Compras' },
-  {
-    title: 'Compras',
-    icon: 'shopping_cart',
-    items: [
-      { name: 'Registro', title: 'Registro de Compras', component: 'components/Compras_registro' },
-      { name: 'Administrar', title: 'Administrar Compras', component: 'components/Compras_administrar' },
-    ]
-  },
   { header: 'Gestion de Ventas' },
+  {
+    title: 'Historial de Ventas',
+    icon: 'book',
+    name: 'Venta_Historial',
+  },
   {
     title: 'Registrar Venta',
     icon: 'note_add',
@@ -25,9 +21,10 @@ const Menu =  [
     title: 'Reporte de Ventas',
     icon: 'assignment',
     items: [
-      { name: 'Fecha', title: 'Ventas por fecha', component: 'components/Ventas_fecha' },
-      { name: 'Mes', title: 'Ventas mensuales', badge: 'new', component: 'components/Ventas_mes' },
-      { name: 'Dia', title: 'Ventas diarias', component: 'components/Ventas_dia' }
+      { name: 'Dia', title: 'Ventas Diarias', component: 'components/Ventas_dia' },
+      { name: 'Mes', title: 'Ventas Mensuales', badge: 'new', component: 'components/Ventas_mes' },
+      { name: 'Año', title: 'Ventas Anuales', component: 'components/Ventas_fecha' }
+      
     ]
   },
   { header: 'Gestion de Productos' },
@@ -51,7 +48,7 @@ const Menu =  [
   { divider: true }
 ];
 // reorder menu
-Menu.forEach((item) => {
+/*Menu.forEach((item) => {
   if (item.items) {
     item.items.sort((x, y) => {
       let textA = x.title.toUpperCase();
@@ -59,6 +56,6 @@ Menu.forEach((item) => {
       return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
     });
   }
-});
+});*/
 
 export default Menu;

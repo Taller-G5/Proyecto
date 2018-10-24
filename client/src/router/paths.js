@@ -13,6 +13,8 @@ import ProductoRegistrar from "@/components/Producto_registrar.vue"
 import ProductoAdministrar from "@/components/Producto_administrar.vue"
 import UsuarioAdministrar from "@/components/Usuarios_administrar.vue"
 import UsuarioRegistrar from "@/components/Usuarios_registrar.vue"
+import UsuarioPerfil from "@/components/Usuario_perfil.vue"
+import VentasHistorial from "@/components/Ventas_historial.vue"
 export default [
 
   {
@@ -67,7 +69,7 @@ export default [
     }
   },
   {
-    path: 'compras/administrar',
+    path: '/compras/administrar',
     meta: {
       breadcrumb: true
     },
@@ -75,7 +77,7 @@ export default [
     component: ComprasAdministrar
   },
   {
-    path: 'compras/registro',
+    path: '/compras/registro',
     meta: {
       breadcrumb: true
     },
@@ -83,7 +85,7 @@ export default [
     component: ComprasRegistro
   },
   {
-    path: 'ventas/registrar',
+    path: '/ventas/registrar',
     meta: {
       breadcrumb: true
     },
@@ -91,7 +93,15 @@ export default [
     component: VentasRegistro
   },
   {
-    path: 'ventas/dia',
+    path:'/ventas/historial',
+    meta:{
+      breadcrumb:true
+    },
+    name:'Venta_Historial',
+    component:VentasHistorial
+  },
+  {
+    path: '/ventas/dia',
     meta: {
       breadcrumb: true
     },
@@ -99,7 +109,7 @@ export default [
     component: VentasDia
   },
   {
-    path: 'ventas/mes',
+    path: '/ventas/mes',
     meta: {
       breadcrumb: true
     },
@@ -107,7 +117,7 @@ export default [
     component: VentasMes
   },
   {
-    path: 'ventas/fecha',
+    path: '/ventas/fecha',
     meta: {
       breadcrumb: true
     },
@@ -115,7 +125,7 @@ export default [
     component: VentasFecha
   },
   {
-    path: 'productos/administrar',
+    path: '/productos/administrar',
     meta: {
       breadcrumb: true
     },
@@ -123,7 +133,7 @@ export default [
     component: ProductoAdministrar
   },
   {
-    path: 'Productos/registrar',
+    path: '/productos/registrar',
     meta: {
       breadcrumb: true
     },
@@ -131,7 +141,7 @@ export default [
     component: ProductoRegistrar
   },
   {
-    path: 'usuarios/administrar',
+    path: '/usuarios/administrar',
     meta: {
       breadcrumb: true
     },
@@ -139,12 +149,20 @@ export default [
     component: UsuarioAdministrar
   },
   {
-    path: 'usuarios/registrar',
+    path: '/usuarios/registrar',
     meta: {
       breadcrumb: true
     },
     name: 'components/Usuario_registrar',
     component: UsuarioRegistrar
+  },
+  {
+    path:'/usuarios/perfil',
+    meta:{
+      breadcrumb:true
+    },
+    name:'perfil',
+    component: UsuarioPerfil
   },
   {
     path: '/dashboard',
