@@ -22,9 +22,21 @@ module.exports = (app,options)=>{
 
     app.post('/register',(req,res,next)=>{
       let producto = req.body
-      options.repository.create(product).then(resp=>{
+      options.repository.register(product).then(resp=>{
           res.status(200).json(resp)
       })
       .catch(next)
+    })
+
+
+    app.delete('/delete/:id',(req,res,next)=>{
+        let id = req.params.id
+        if(!id){
+            throw new Error("Se espero un id en la ruta")
+        }
+        options.repository.delete(id).then(resp=>{
+            res.status(200).json(resp)
+        })
+        .catch(next)
     })
 }

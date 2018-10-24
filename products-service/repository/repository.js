@@ -48,10 +48,10 @@ class Repository{
         return new Promise((resolve,reject)=>{
               this.connection.query(querys.create,producto,(err,result)=>{
               if(err){
-                  return reject(new Error('A ocurrido un error: '+err))
+                  return reject(new Error('A ocurrido un Error: '+err))
               }
               else{
-                  resolve({message:"Se inserto en la base de datos!"});
+                  resolve({success:true,message:"Se registro el producto en la base de datos!"});
 
               }
 
@@ -59,12 +59,18 @@ class Repository{
         })
     }
 
-    update(id){
-
-    }
 
     delete(id){
-
+        return new Promise((resolve,reject)=>{
+            this.connection.query(querys.delete,[id],(err,result)=>{
+                if(err){
+                    return reject(new Error('A ocurrido un error: '+ err))
+                }
+                else{
+                    resolve({success:true,message:"Producto Eliminado"})
+                }
+            })
+        })
     }
 
     disconnect(){
