@@ -8,10 +8,9 @@
     v-model="drawer"
     width="260"
     >
-    <v-toolbar color="primary darken-1" dark>
-      <img id="logo" :src="computeLogo" height="36" alt="imagen">
+    <v-toolbar color="blue darken-4" dark>
       <v-toolbar-title class="ml-0 pl-3">
-        {{user.username}}
+        {{user.role}}
       </v-toolbar-title>        
     </v-toolbar>
     <vue-perfect-scrollbar class="drawer-menu--scroll" :settings="scrollSettings">
@@ -97,12 +96,12 @@ export default {
   mounted(){
     let is_session = sessionStorage.getItem("vue-session-key");
     if(is_session == "{}"){
-      this.$router.push({name:'Login'})
+      this.$router.push({name:'AccessDenied'})
     }    
     else{
       this.user = JSON.parse(is_session).user;
       if(this.user.role == "OPERADOR"){
-        this.menus = menu.slice(0,9)
+        this.menus = menu.slice(0,6)
       }
       else{
         this.menus = menu
@@ -152,8 +151,6 @@ export default {
     height: calc(100vh - 48px)
     overflow: auto
 
-#logo
-  background-color : white
   
 
 </style>

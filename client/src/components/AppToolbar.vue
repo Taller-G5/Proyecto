@@ -1,6 +1,6 @@
 <template>
   <v-toolbar
-    color="primary"
+    color="blue darken-4"
     fixed
     dark
     app
@@ -12,6 +12,7 @@
       <v-btn icon @click="handleFullScreen()">
         <v-icon>fullscreen</v-icon>
       </v-btn>
+      <h5 class="texto">{{user.username}}</h5>
       <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
         <v-btn icon large flat slot="activator">
           <v-avatar size="30px">
@@ -35,25 +36,14 @@
 import Util from '@/util';
 export default {
   name: 'app-toolbar',
-  components: {
-    
-  },
   data: () => ({
     items: [
       {
         icon: 'account_circle',
-        href: '#',
+        href: '#/usuarios/perfil',
         title: 'Perfil',
         click: (e) => {
-          console.log(e);
-        }
-      },
-      {
-        icon: 'settings',
-        href: '#',
-        title: 'Configuracion',
-        click: (e) => {
-          console.log(e);
+          window.getApp.$emit('PERFIL');
         }
       },
       {
@@ -65,7 +55,17 @@ export default {
         }
       }
     ],
+    user:{}
   }),
+  mounted(){
+    let is_session = sessionStorage.getItem("vue-session-key");
+    if(is_session == "{}"){
+      this.$router.push({name:'Login'})
+    }    
+    else{
+      this.user = JSON.parse(is_session).user;
+    }
+  },
   computed: {
     toolbarColor () {
       return this.$vuetify.options.extra.mainNav;
@@ -81,3 +81,10 @@ export default {
   }
 };
 </script>
+<style>
+  .texto{
+    color: white;
+    margin: auto;
+  }
+</style>
+

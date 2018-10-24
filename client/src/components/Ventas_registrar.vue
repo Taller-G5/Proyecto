@@ -27,10 +27,10 @@
                 </v-container>           
               </v-card-text>
               <v-card-actions>
-                  <v-btn fab dark color="green" @click="add">
+                  <v-btn dark color="green" @click="add">
                         <v-icon dark>add</v-icon>
                     </v-btn> 
-                  <v-btn fab dark color="red" @click="remove">
+                  <v-btn dark color="red" @click="remove">
                         <v-icon dark>remove</v-icon>
                     </v-btn>
                   <v-spacer></v-spacer> 
@@ -100,6 +100,7 @@ export default {
                     this.message =res.data.message;
                     this.reporte = [{}]
                     this.list_products = [1]
+                    this.total = 0
                 }
             }).catch(err=>{
                 console.log(err)
