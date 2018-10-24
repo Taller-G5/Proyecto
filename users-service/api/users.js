@@ -44,4 +44,24 @@ module.exports = (app,options)=>{
             })
         .catch(next)
     })
+
+    app.delete('/eliminar/:id',(req,res,next)=>{
+        let id = req.params.id;
+        if(!id){
+            throw new Error("Se espero un id en la ruta")
+        }
+        options.repository.delete(id).then(resp=>{
+            res.status(200).json(resp)
+        })
+        .catch(next)
+    })
+
+    app.put('/actualizar',(req,res,next)=>{
+        let user = req.body;
+        options.repository.update(user)
+            .then(resp=>{
+                res.status(200).json(resp)
+            })
+        .catch(next)
+    })
 }

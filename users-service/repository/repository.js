@@ -88,7 +88,7 @@ class Repository{
                             return reject(new Error('A ocurrido un error: '+err))
                         }
                         else{
-                            resolve({message:"Se inserto en la base de datos!"});
+                            resolve({success:true,message:"Se registro el usuario en la base de datos!"});
 
                         }
 
@@ -96,6 +96,52 @@ class Repository{
                 })
             })
 
+        })
+    }
+
+    delete(id){
+        return new Promise((resolve,reject)=>{
+            this.connection.query("DELETE FROM USUARIO WHERE idUSUARIO = ?",[id],(err,result)=>{
+                if(err){
+                    return reject(new Error('A ocurrido un error: '+err))
+                }
+                else{
+                    resolve({success:true,message:"Usuario eliminado!"})
+                }
+            })
+        })
+    }
+
+    update(user){
+        return new Promise((resolve,reject)=>{
+            if(user.changeP){
+                bcrypt.genSalt(10,(err,salt)=>{
+                    if(err) return console.log(`Error ${err}`)
+                    bcrypt.hash(user.password,salt,(err,hash)=>{
+                        if(err) return console.log(`Error: ${err}`)
+                        user.password = hash
+                        this.connection.query("UPDATE USUARIO SET username=?,password=?,role=? WHERE idUSUARIO = ?",[user.username,user.password,user.role,user.id],(err,results)=>{
+                            if(err){
+                                return reject(new Error('A ocurrido un error:' +err))
+                            }
+                            else{
+                                resolve({success:true,message:"Usuario actualizado!"})
+                            }
+                        })
+                    })
+                })
+            }
+            else{
+                this.connection.query("UPDATE USUARIO SET username=?,password=?,role=? WHERE idUSUARIO = ?",[user.username,user.password,user.role,user.id],(err,results)=>{
+                    if(err){
+                        return reject(new Error('A ocurrido un error:' +err))
+                    }
+                    else{
+                        resolve({success:true,message:"Usuario actualizado!"})
+                    }
+                })
+            }
+            
         })
     }
 
