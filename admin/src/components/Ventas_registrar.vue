@@ -34,9 +34,8 @@
                         <v-icon dark>remove</v-icon>
                     </v-btn>
                   <v-spacer></v-spacer> 
-                  <v-spacer></v-spacer>
+                    <v-btn block color="light-blue darken-4 white--text"  @click="calcularTotal">Calcular Total</v-btn>
                     <v-btn block color="light-blue darken-4 white--text" :loading="loading" @click="saved">Guardar</v-btn>
-                    <v-spacer></v-spacer>
                     <v-spacer></v-spacer>
                     <h3>Total : S/. {{total}}</h3>
                        
@@ -93,7 +92,7 @@ export default {
                 detalles:reporte_final
             }
             
-            HTTP.post("venta/register",data).then(res=>{
+            HTTP.url_venta.post("register",data).then(res=>{
                 if(res.data.success){
                     this.loading = false;
                     this.success = true;
@@ -112,8 +111,8 @@ export default {
             let _d = sub_d[1] +"/"+sub_d[0]+"/"+sub_d[2]
             return _d;
         },
-        getProducts : async function(){
-            HTTP.get("product/products").then(resp=>{
+        getProducts : function(){
+            HTTP.url_product.get("products").then(resp=>{
                 this.products_name = resp.data.map(product=>{
                     return product.nombre
                 }).sort();
@@ -128,7 +127,7 @@ export default {
             })
       },
       getNumVenta : function(){
-          HTTP.get("venta/num_ventas").then(resp=>{
+          HTTP.url_venta.get("num_ventas").then(resp=>{
                 this.num_venta=resp.data.num_ventas+1;
           }).catch(err=>{
               console.log(err)
@@ -149,17 +148,15 @@ export default {
       getid: function(producto){
           let result = this.products.find(p=>p.nombre==producto)
           if(result) return result.id
-      }
-    },
-    watch:{
-        reporte: function(rep){
-            let total = 0
-            rep.forEach(element => {
+      },
+      calcularTotal:function(){
+          let total = 0
+            this.reporte.forEach(element => {
                 total = this.getprice(element.producto)* parseInt(element.cantidad) + total
             });
             if(!isNaN(total))
                 this.total = total
-        }
+      }
     }
 
 }

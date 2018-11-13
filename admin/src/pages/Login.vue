@@ -12,12 +12,6 @@
                   <v-form>
                       <v-text-field append-icon="person" name="login" label="Usuario" type="text" v-model="user.username"></v-text-field>
                       <v-text-field append-icon="lock" name="password" label="Contraseña" type="password" v-model="user.password"></v-text-field>
-                    <v-select
-                    :items="['ADMINISTRADOR','OPERADOR']"
-                    label="Tipo de Usuario"
-                    v-model="user.role"
-                    required
-                    ></v-select>
                   </v-form>              
               </v-card-text>
               <v-card-actions>
@@ -48,7 +42,7 @@ export default {
   methods: {
     login () {
       this.loading = true;
-      HTTP.post('login',this.user).then(response=>{
+      HTTP.url_user.post('login',this.user).then(response=>{
         if(response.data.success){
           this.$session.start()
           this.$session.set('jwt',response.data.token)

@@ -1,5 +1,5 @@
 <template>
-    <div class="inspire">
+    <v-container>
         <v-flex x12 sm6 md12>
             <div>
                 <v-toolbar flat color="white">
@@ -50,7 +50,7 @@
                     <v-alert :value="success" type="success">{{message}}</v-alert>
             </div>
         </v-flex>
-    </div>
+    </v-container>
 </template>
 
 <script>
@@ -114,7 +114,7 @@ export default {
         }, 300)
       },
       getUsers(){
-          HTTP.get('user/users').then(res=>{
+          HTTP.url_user.get('users').then(res=>{
             this.users = res.data
         })
         .catch(err=>{

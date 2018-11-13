@@ -42,7 +42,7 @@ export default {
     methods:{
         saved:function(){
             this.loading=true
-            HTTP.post('user/register',this.user).then(res=>{
+            HTTP.url_user.post('register',this.user).then(res=>{
                 let response = res.data
                 if(response.success){
                     this.loading = false

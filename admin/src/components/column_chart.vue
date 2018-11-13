@@ -1,8 +1,8 @@
 <template>
-  <v-flex xs12 sm8 md4>
-    <highcharts class="chart" :options="chartOptions" :updateArgs="updateArgs"></highcharts>
-  </v-flex>
+    <highcharts :options="chartOptions" :updateArgs="updateArgs"></highcharts>
 </template>
+
+
 <script>
 import highcharts from 'highcharts'
 export default{

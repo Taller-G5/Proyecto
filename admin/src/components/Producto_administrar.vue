@@ -1,6 +1,6 @@
 <template>
-    <div class="inspire">
-      <v-flex xs12 sm6 md4>
+    <v-container>
+      <v-flex xs12 sm8 md4>
           <v-text-field
             label="Buscar producto"
             append-icon="search"
@@ -16,14 +16,31 @@
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                <v-flex xs12 sm6 md12>
+                <v-flex xs12 sm6 md6>
                   <v-text-field v-model="itemEdit.nombre" label="Nombre"></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md12>
-                  <v-text-field v-model="itemEdit.precio" type="number" label="Precio"></v-text-field>
+                <v-flex xs12 sm6 md6>
+                  <v-text-field v-model="itemEdit.precio" type="number" label="Precio Venta"></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md12>
-                  <v-text-field v-model="itemEdit.stock" type="number" label="Stock"></v-text-field>
+                <v-flex xs12 sm6 md6>
+                  <v-text-field v-model="itemEdit.proovedor" type="text" label="Proovedor"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md6>
+                  <v-select
+                            :items="['INYECTABLE','PASTILLA','JARABE']"
+                            label="Categoria"
+                            v-model="itemEdit.categoria"
+                            required
+                            ></v-select>
+                </v-flex>
+                <v-flex xs12 sm12 md12>
+                    <v-textarea
+                            name="input-7-1"
+                            outline
+                            v-model="itemEdit.descripcion"
+                            label="Descripcion"
+                            auto-grow
+                            ></v-textarea>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -68,7 +85,10 @@
                     <template slot="items" slot-scope="props">
                         <td>{{ props.item.id }}</td>
                         <td class="text-xs-left">{{ props.item.nombre }}</td>
-                        <td class="text-xs-left"><img class="image_photo" src="http://cumafar.helencaltum.com/wp-content/uploads/2016/11/paracetamol.jpg"></td>                      
+                        <td class="text-xs-left"><img class="image_photo" :src="props.item.image_url"></td>                      
+                        <td class="text-xs-left">{{ props.item.proovedor }}</td>
+                        <td class="text-xs-left">{{ props.item.categoria }}</td>
+                        <td class="text-xs-left">{{ props.item.precio_compra }}</td>
                         <td class="text-xs-left">{{ props.item.precio }}</td>
                         <td class="text-xs-left">{{ props.item.stock }}</td>  
                         <td class="text-xs-left">
@@ -115,7 +135,8 @@
                 Close
             </v-btn>
         </v-snackbar>  
-    </div>
+    </v-container>
+    
 </template>
 
 <script>
@@ -137,7 +158,10 @@ export default {
               value: 'nombre'
             },
             {text:'Imagen',sortable:false,value:'url_image'},
-            { text: 'Precio(S/.)', sortable: false, value: 'precio'},
+            { text: 'Proovedor', sortable: false,value: 'proovedor'},
+            { text: 'Categoria', sortable: false,value: 'categoria'},
+            { text: 'Precio(S/.) Compra', sortable: false, value: 'precio_compra'},
+            { text: 'Precio(S/.) Venta', sortable: false, value: 'precio'},
             { text: 'Stock', sortable: false,value: 'stock'},
             { text: 'Acciones', value: 'name', sortable: false }
         ],
@@ -162,13 +186,13 @@ export default {
     },
     methods:{
       getProducts : async function(){
-        HTTP.get("products").then(resp=>{
+        HTTP.url_product.get("products").then(resp=>{
           this.desserts = resp.data;
           this.verify(this.desserts)
         })
       },
       editItem(item){
-          HTTP.get(`product/search/${item.id}`).then(res=>{
+          HTTP.url_product.get(`search/${item.id}`).then(res=>{
               this.itemEdit=res.data
               this.dialog = true
           })
@@ -183,7 +207,9 @@ export default {
           this.itemEdit={}
       },
       save(){
-          HTTP.put("product/update",this.itemEdit).then(res=>{
+          this.itemEdit.nombre = this.itemEdit.nombre.toUpperCase()
+          console.log(this.itemEdit)
+          HTTP.url_product.put("update",this.itemEdit).then(res=>{
               let response = res.data
               if(response.success){
                   this.success = true
@@ -202,18 +228,20 @@ export default {
       verify(array){
           let text = ""
           this.snackbar=false
-          for (let index = 0; index < array.length; index++) {
+          if(array.length>0){
+              for (let index = 0; index < array.length; index++) {
               const element = array[index];
               if(element.stock<=2){
                     text +=`Producto ${element.nombre} con poco stock,`
                     this.text = text
+                    this.snackbar = true
               }
           }
           
-          this.snackbar = true
+          }      
       },
       deleteD(){
-          HTTP.delete(`product/delete/${this.itemDelete.id}`).then(res=>{
+          HTTP.url_product.delete(`delete/${this.itemDelete.id}`).then(res=>{
               let response = res.data
               if(response.success){
                 this.dialogD = false

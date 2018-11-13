@@ -1,15 +1,11 @@
 <template>
-    <v-app id="inspire">
-            <v-content v-if="listo">
-                <v-container fluid fill-height>
-                    <v-layout justify-center align-center>
-                        <v-flex x12 sm8 md12>
-                           <column :data="data" :type='type'></column>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
-            </v-content>
-    </v-app>
+    <v-container v-if="listo" fluid fill-height>
+        <v-layout justify-center align-center>
+            <v-flex xs12 sm6 md4>
+                <column :data="data" :type='type'></column>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 
 <script>
@@ -27,7 +23,7 @@ export default {
         }
     },
     mounted(){
-        HTTP.get("venta/ventas").then(res=>{
+        HTTP.url_venta.get("ventas").then(res=>{
             this.data = res.data
             this.listo = true
         })

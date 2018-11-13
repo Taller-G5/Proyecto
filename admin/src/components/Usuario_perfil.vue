@@ -67,7 +67,7 @@ export default {
             else{
                 this.id = JSON.parse(is_session).user.id;
             }
-            HTTP.get(`user/search/${this.id}`).then(res=>{
+            HTTP.url_user.get(`search/${this.id}`).then(res=>{
                 this.user = res.data
                 this.password= this.user.password
             })
@@ -83,7 +83,7 @@ export default {
             if(this.user.password != this.password){
                 this.user.changeP = true
             }
-            HTTP.put('user/actualizar',this.user).then(resp=>{
+            HTTP.url_user.put('actualizar',this.user).then(resp=>{
                 let response = resp.data
                 if(response.success){
                     this.loading = false
