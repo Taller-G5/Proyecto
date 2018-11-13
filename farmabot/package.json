@@ -1,0 +1,21 @@
+{
+  "name": "farmabot",
+  "version": "1.0.0",
+  "description": "FarmaBot es un bot para consultas de productos del Sistema de Farmacia",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js & lt --port 5000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Axel Campos Salazar",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "morgan": "^1.9.1",
+    "mysql": "^2.16.0",
+    "request": "^2.88.0"
+  }
+}

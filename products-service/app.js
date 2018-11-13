@@ -2,8 +2,8 @@ const server = require('./server/server')
 const repository = require('./repository/repository')
 const config = require('./config/config')
 
-console.log("--- Customer Service---")
-console.log("Connecting to customer repository...")
+console.log("--- Products Service---")
+console.log("Connecting to products repository...")
 
 process.on('uncaughtException', function(err) {
     console.error('Unhandled Exception', err);

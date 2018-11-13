@@ -110,9 +110,6 @@ class Repository{
                         if(err){
                           return reject(new Error('A ocurrido un error: '+err))
                         }
-                        else{
-                          console.log("Producto actualizado")
-                        }
                       })
                     }
                   })

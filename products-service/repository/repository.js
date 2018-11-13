@@ -16,8 +16,13 @@ class Repository{
                     return{
                         id:productos.idPRODUCTO,
                         nombre:productos.nombre,
+                        proovedor:productos.proovedor,
                         precio:productos.precio,
-                        stock:productos.stock
+                        precio_compra:productos.precio_compra,
+                        stock:productos.stock,
+                        descripcion:productos.descripcion,
+                        categoria:productos.categoria,
+                        image_url:productos.image_url
                     }
                 }))
             })
@@ -37,8 +42,13 @@ class Repository{
                     return{
                       id:producto.idPRODUCTO,
                       nombre:producto.nombre,
+                      proovedor:producto.proovedor,
                       precio:producto.precio,
-                      stock:producto.stock
+                      precio_compra:producto.precio_compra,
+                      stock:producto.stock,
+                      descripcion:producto.descripcion,
+                      categoria:producto.categoria,
+                      image_url:producto.image_url
                     }
                 })[0])
             })
@@ -46,22 +56,51 @@ class Repository{
     }
     create(producto){
         return new Promise((resolve,reject)=>{
-              this.connection.query(querys.create,producto,(err,result)=>{
-              if(err){
-                  return reject(new Error('A ocurrido un Error: '+err))
-              }
-              else{
-                  resolve({success:true,message:"Se registro el producto en la base de datos!"});
-
-              }
-
+            this.connection.beginTransaction(err=>{
+                if(err){
+                    return reject(new Error('A ocurrido un error: '+err))
+                }
+                else{
+                    this.connection.query(querys.create,producto,(err,result)=>{
+                        if(err){
+                            return this.connection.rollback(()=>{
+                                reject(new Error('A ocurrido un error: '+err))
+                            })
+                        }
+                        else{
+                            let nueva_compra ={
+                                idPRODUCTO:result.insertId,
+                                cantidad:producto.stock,
+                                fecha_compra:producto.fecha_registro
+                            }
+                            this.connection.query(querys.insertCompra,nueva_compra,(err,result)=>{
+                                if(err){
+                                    return this.connection.rollback(()=>{
+                                        reject(new Error('A ocurrido un error: '+err))
+                                    })
+                                }
+                                else{
+                                    this.connection.commit(err=>{
+                                        if(err){
+                                          return this.connection.rollback(()=>{
+                                            reject(new Error('A ocurrido un error: '+err))
+                                          })
+                                        }
+                                        else resolve({success:true,message:"Se registro el producto en la base de datos!"});
+                                      })
+                                }
+                            })
+                        }
+                      })
+                }
             })
+              
         })
     }
 
     update(product){
         return new Promise((resolve,reject)=>{
-            this.connection.query(querys.update,[product.nombre,product.precio,product.stock,product.id],(err,result)=>{
+            this.connection.query(querys.update,[product.nombre,product.precio,product.proovedor,product.categoria,product.descripcion,product.id],(err,result)=>{
                 if(err){
                     return reject(new Error('A ocurrido un error: '+ err))
                 }
@@ -80,6 +119,111 @@ class Repository{
                 }
                 else{
                     resolve({success:true,message:"Producto Eliminado"})
+                }
+            })
+        })
+    }
+
+    totalGasto(){
+        return new Promise((resolve,reject)=>{
+            this.connection.query(querys.totalGasto,(err,results)=>{
+                if(err){
+                    return reject(new Error('A ocurrido un error: '+ err))
+                }
+                else{
+                    resolve(results.map(compra=>{
+                        return{
+                            nombre:compra.nombre,
+                            total_gasto:compra.total_gasto,
+                            fecha_compra:compra.fecha_compra
+                        }
+                    }))
+                }
+            })
+        })
+    }
+
+    updateLatest(product){
+        return new Promise((resolve,reject)=>{
+            this.connection.beginTransaction(err=>{
+                if(err){
+                    return reject(new Error('A ocurrido un error: '+err))
+                }
+                else{
+                    let compra={
+                        idPRODUCTO:product.id,
+                        cantidad:product.nuevo_stock,
+                        fecha_compra:product.fecha_compra
+                    }
+                    this.connection.query(querys.insertCompra,compra,(err,results)=>{
+                        if(err){
+                            return this.connection.rollback(()=>{
+                                reject(new Error('A ocurrido un error: '+err))
+                            })
+                        }
+                        else{
+                            this.connection.query(querys.updateStock,[(product.stock+ parseInt(product.nuevo_stock)),product.id],(err,results)=>{
+                                if(err){
+                                    return this.connection.rollback(()=>{
+                                        reject(new Error('A ocurrido un error: '+err))
+                                    })
+                                }
+                                else{
+                                    this.connection.commit(err=>{
+                                        if(err){
+                                          return this.connection.rollback(()=>{
+                                            reject(new Error('A ocurrido un error: '+err))
+                                          })
+                                        }
+                                        else resolve({success:true,message:"Se actualizo el stock del producto"});
+                                      })
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        })
+    }
+
+    totalProductos(){
+        return new Promise((resolve,reject)=>{
+            this.connection.query(querys.totalProductos,(err,results)=>{
+                if(err){
+                    return reject(new Error('A ocurrido un error: '+ err))
+                }
+                else{
+                    resolve(results.map(producto=>{
+                        return{
+                            producto:producto.producto,
+                            total:producto.total,
+                        }
+                    }));
+                }
+            })
+        })
+    }
+
+    productMatch(some){
+        return new Promise((resolve,reject)=>{
+            this.connection.query(querys.ProductoMatch,[some],(err,results)=>{
+                if(err){
+                    return reject(new Error('A ocurrido un error: '+ err))
+                }
+                else{
+                    resolve(results.map(productos=>{
+                        return{
+                            id:productos.idPRODUCTO,
+                            nombre:productos.nombre,
+                            proovedor:productos.proovedor,
+                            precio:productos.precio,
+                            precio_compra:productos.precio_compra,
+                            stock:productos.stock,
+                            descripcion:productos.descripcion,
+                            categoria:productos.categoria,
+                            image_url:productos.image_url
+                        }
+                    }))
                 }
             })
         })
