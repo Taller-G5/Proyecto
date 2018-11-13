@@ -1,101 +1,72 @@
 <template>
-  <div id="appRoot">
-    <template v-if="!$route.meta.public">
-      <v-app id="inspire" class="app">
-        <app-drawer class="app--drawer"></app-drawer>
-        <app-toolbar class="app--toolbar"></app-toolbar>
-        <v-content>
-          <!-- Page Header -->
-          <page-header v-if="$route.meta.breadcrumb"></page-header>
-          <div class="page-wrapper">
-            <router-view></router-view>
-          </div>   
-           <!-- App Footer -->
-          <v-footer height="auto" class="white pa-3 app--footer">
-            <v-spacer></v-spacer>
-            <span class="caption">Sistema Farmacia &copy; {{ new Date().getFullYear() }}</span>
-            <v-spacer></v-spacer>
-          </v-footer>
-        </v-content>
-        <!-- Go to top -->
-        <app-fab></app-fab>
-        <!-- theme setting -->      
-      </v-app>
-    </template>
-    <template v-else>
-      <transition>
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
-      </transition>
-    </template>
-    <v-snackbar
-      :timeout="3000"
-      bottom
-      right
-      :color="snackbar.color"
-      v-model="snackbar.show"
-    >
-      {{ snackbar.text }}
-      <v-btn dark flat @click.native="snackbar.show = false" icon> 
-        <v-icon>close</v-icon>
-      </v-btn>
-    </v-snackbar>    
-  </div>
+  <v-app>
+    <v-toolbar class="indigo white--text">
+    <img src="./assets/farmacia.png" alt="">
+    <v-toolbar-title>FarmaSalud</v-toolbar-title>
+    <v-spacer></v-spacer>
+    <v-toolbar-items class="hidden-sm-and-down ">
+      <v-btn @click="route({name:'home'})" class="white--text" flat>Inicio</v-btn>
+      <v-btn @click="route({name:'products'})" class="white--text" flat>Productos</v-btn>
+      <v-btn @click="route({name:'about'})" class="white--text" flat>Nosotros</v-btn>
+      <v-btn @click="route({name:'contactos'})" class="white--text" flat>Contactos</v-btn>
+    </v-toolbar-items>
+  </v-toolbar>
+    <v-content>
+      <router-view></router-view>
+    </v-content>
+    <chat v-show="!hidden"></chat>
+    <v-fab-transition>
+        <v-btn
+          class="btn-bot"
+          color="indigo darken-3"
+          fab
+          dark
+          absolute
+          bottom
+          right
+          @click="openChat"
+        >
+          <v-icon>chat</v-icon>
+        </v-btn>
+    </v-fab-transition>
+    
+  </v-app>
 </template>
+
 <script>
-import AppDrawer from '@/components/AppDrawer';
-import AppToolbar from '@/components/AppToolbar';
-import AppFab from '@/components/AppFab';
-import PageHeader from '@/components/PageHeader';
-import menu from '@/api/menu';
-import ThemeSettings from '@/components/ThemeSettings';
-import AppEvents from  './event';
+import Home from '@/views/Home'
+import Chat from '@/components/chat'
 export default {
+  name: 'App',
   components: {
-    AppDrawer,
-    AppToolbar,
-    AppFab,
-    PageHeader,
-    ThemeSettings
+    Home,
+    Chat
   },
-  data: () => ({
-    expanded: true,
-    rightDrawer: false,
-    snackbar: {
-      show: false,
-      text: '',
-      color: '',
-    }
-  }),
-
-  computed: {
-
-  },
-
-  created () {
-    AppEvents.forEach(item => {
-      this.$on(item.name, item.callback);
-    });
-    window.getApp = this;
-  },
-  methods: {
-    openThemeSettings () {
-      this.$vuetify.goTo(0);
-      this.rightDrawer = (!this.rightDrawer);
+  data () {
+    return {
+      hidden:true
     }
   },
-
-};
+  methods:{
+    route:function(path){
+      this.$router.push(path)
+    },
+    openChat: function(){
+      this.hidden = !this.hidden
+    }
+  }
+}
 </script>
 
-
-<style lang="stylus" scoped>
-  .setting-fab 
-    top:50%!important; 
-    right:0;
-    border-radius:0  
-  .page-wrapper
-    min-height:calc(100vh - 64px - 50px - 81px );  
+<style scoped>
+  img{
+    background-color: white;
+    width: 40px;
+    height: 40px;
+  }
+  .btn-bot{
+    margin-bottom: 20px;
+  }
 
 </style>
+
