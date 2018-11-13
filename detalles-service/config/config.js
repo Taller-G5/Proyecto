@@ -6,5 +6,10 @@ module.exports={
         user:'axel',
         password:'admin',
         port:3306
+    },
+    cloudStorage:{
+        cloudName:'axel123',
+        API_KEY:'367482552436946',
+        API_SECRET:'f6AOPFYkNcMXBqvsoohPgCMMpgE'
     }
 }

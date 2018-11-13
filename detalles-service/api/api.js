@@ -27,11 +27,29 @@ module.exports = (app,options)=>{
       })
       .catch(next)
     })
+
+
+
+    app.get('/reporte/:id',(req,res,next)=>{
+        let id = req.params.id
+        options.repository.get_data_4_pdf(id).then(resp=>{
+            res.status(200).json(resp)
+        })
+        .catch(next)
+    })
+    
     app.post('/register',(req,res,next)=>{
       let detalle = req.body
       options.repository.create(detalle).then(resp=>{
           res.status(200).json(resp)
       })
       .catch(next)
+    })
+
+    app.get('/total_venta',(req,res,next)=>{
+        options.repository.totalVenta().then(resp=>{
+            res.status(200).json(resp)
+        })
+        .catch(next)
     })
 }
