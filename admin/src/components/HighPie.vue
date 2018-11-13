@@ -66,22 +66,24 @@ export default {
     },
     mounted(){
         let data = this.products
-        let labels = this.getlabels(data)
-        let total = this.getTotal(data,labels)
-        let _t = this.arreglo(labels,total)
-        let nuevoTotal = _t.sort((a,b)=>{
-            if(b.total > a.total){
-                return 1
-            }
-            if(b.total<a.total){
-                return -1
-            }
-            return 0
-        })
-        this.chartOptions.series[0].data[0].name = nuevoTotal[0].producto
-        this.chartOptions.series[0].data[1].name = nuevoTotal[1].producto
-        this.chartOptions.series[0].data[0].y = nuevoTotal[0].total
-        this.chartOptions.series[0].data[1].y = nuevoTotal[1].total
+        if(data!=undefined){
+            let labels = this.getlabels(data)
+            let total = this.getTotal(data,labels)
+            let _t = this.arreglo(labels,total)
+            let nuevoTotal = _t.sort((a,b)=>{
+                if(b.total > a.total){
+                    return 1
+                }
+                if(b.total<a.total){
+                    return -1
+                }
+                return 0
+            })
+            this.chartOptions.series[0].data[0].name = nuevoTotal[0].producto
+            this.chartOptions.series[0].data[1].name = nuevoTotal[1].producto
+            this.chartOptions.series[0].data[0].y = nuevoTotal[0].total
+            this.chartOptions.series[0].data[1].y = nuevoTotal[1].total
+        }
         //this.chartOptions.series[0].data[2].y = nuevoTotal[2].total
     },
     methods:{
