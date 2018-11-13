@@ -1,32 +1,8 @@
 <template>
         <v-container fluid fill-height >
             <v-layout justify-center align-center >
-                <v-flex x12 sm8 md12>
-                    <v-card class="elevation-4 factura" v-for="(detalle,index) in desserts" :key="index">
-                        <v-toolbar dark color="green darken-4">
-                            <v-toolbar-title>BOLETA Nº {{detalle.num_venta}}</v-toolbar-title>
-                        </v-toolbar>
-                        <v-card-text>
-                            <v-data-table
-                                :headers="headers"
-                                :items="detalle.values"
-                                hide-actions
-                                class="elevation-1"
-                            >
-                            <template slot="items" slot-scope="props">
-                                <td>{{ props.item.producto }}</td>
-                                <td class="text-xs-center">{{ props.item.precio }}</td>
-                                <td class="text-xs-center">{{ props.item.cantidad }}</td>
-                                <td class="text-xs-center">{{ props.item.total }}</td>
-                            </template>
-                            </v-data-table>          
-                        </v-card-text>
-                    <v-card-actions>
-                        <v-spacer>
-                        </v-spacer>
-                        <h3 class="total"> TOTAL: S/. {{detalle.total_sum}}</h3>
-                        </v-card-actions>
-                    </v-card>
+                <v-flex x12 sm6 md12>
+                    <reporte-item v-for="(detalle,index) in detalles" :detalle="detalle" :key="index"></reporte-item>  
                 </v-flex>
             </v-layout>
         </v-container>
@@ -35,24 +11,17 @@
 
 <script>
 import {HTTP} from '../http-commons.js';
+import reporteItem from '@/components/reporteItem'
 export default {
     data(){
         return{
-            headers: [
-          {
-            text: 'Producto',
-            align: 'left',
-            sortable: false,
-            value: 'producto'
-          },
-          { text: 'Precio',align: 'center',sortable: false,value: 'precio' },
-          { text: 'Cantidad',align: 'center',sortable: false, value: 'cantidad' },
-          { text: 'Total (S/.)', align: 'center',sortable: false, value: 'total' }
-        ],
-        desserts: []
+            detalles:[]
         }
     },
-    mounted(){
+    components:{
+        reporteItem
+    },
+     mounted(){
         this.getDetalles()
     },
     methods:{
@@ -69,7 +38,7 @@ export default {
             arreglo.forEach(element=>{
                 if(labels.includes(element.num_venta)){
                     let pos = this.getposicion(labels,element.num_venta)
-                    some[pos].values.push({producto:element.producto,precio:element.precio,cantidad:element.cantidad,total:element.total})
+                    some[pos].values.push({producto:element.producto,precio:element.precio,cantidad:element.cantidad,total:element.total,usuario:element.usuario,fecha_venta:element.fecha_venta})
                 }
             })
             return some;   
@@ -96,17 +65,18 @@ export default {
             return idx;
         },
         getDetalles:function(){
-            HTTP.get("detalle/detalles/join").then(resp=>{
+            HTTP.url_detalle.get("detalles/join").then(resp=>{
                  let new_array = this.arreglar(resp.data)
-                 
                  new_array.forEach(detalle=>{
                      let total_sum = 0;
                      detalle.values.forEach(item=>{
                          total_sum = item.total + total_sum
+                         detalle.usuario = item.usuario
+                         detalle.fecha_venta = item.fecha_venta
                      })
-                     detalle.total_sum = total_sum
+                     detalle.total_sum = total_sum 
                  })
-                 this.desserts= new_array
+                 this.detalles= new_array.reverse()
                 
             })
             .catch(err=>{
@@ -118,12 +88,5 @@ export default {
 </script>
 
 <style>
-    .factura{
-        margin-bottom: 20px;
-    }
-    .total{
-        color: green;
-        margin-right: 20px;
-        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    }
+    
 </style>
