@@ -3,14 +3,13 @@ import Deny from "@/pages/Deny.vue"
 import ServerError from "@/pages/Error.vue"
 import Login from "@/pages/Login.vue"
 import Dashboard from "@/pages/Dashboard.vue"
-import ComprasAdministrar from "@/components/Compras_administrar.vue"
-import ComprasRegistro from "@/components/Compras_registro.vue"
 import VentasRegistro from "@/components/Ventas_registrar.vue"
 import VentasDia from "@/components/Ventas_dia.vue"
 import VentasMes from "@/components/Ventas_mes.vue"
-import VentasFecha from "@/components/Ventas_fecha.vue"
+import VentasFecha from "@/components/Ventas_año.vue"
 import ProductoRegistrar from "@/components/Producto_registrar.vue"
 import ProductoAdministrar from "@/components/Producto_administrar.vue"
+import ProductoCompras from "@/components/Producto_compras.vue"
 import UsuarioAdministrar from "@/components/Usuarios_administrar.vue"
 import UsuarioRegistrar from "@/components/Usuarios_registrar.vue"
 import UsuarioPerfil from "@/components/Usuario_perfil.vue"
@@ -69,22 +68,6 @@ export default [
     }
   },
   {
-    path: '/compras/administrar',
-    meta: {
-      breadcrumb: true
-    },
-    name: 'components/Compras_administrar',
-    component: ComprasAdministrar
-  },
-  {
-    path: '/compras/registro',
-    meta: {
-      breadcrumb: true
-    },
-    name: 'components/Compras_registro',
-    component: ComprasRegistro
-  },
-  {
     path: '/ventas/registrar',
     meta: {
       breadcrumb: true
@@ -139,6 +122,14 @@ export default [
     },
     name: 'components/Producto_registrar',
     component: ProductoRegistrar
+  },
+  {
+    path:'/productos/compras',
+    meta:{
+      breadcrumb:true
+    },
+    name:'components/Producto_compras',
+    component:ProductoCompras
   },
   {
     path: '/usuarios/administrar',

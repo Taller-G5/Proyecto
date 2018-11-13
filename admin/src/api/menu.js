@@ -32,7 +32,7 @@ const Menu =  [
     title: 'Productos',
     icon: 'store',
     items: [
-      { name: 'Registrar', title: 'Registrar Producto', component: 'components/Producto_registrar' },
+      { name: 'Compras', title: 'Compras', component: 'components/Producto_compras' },
       { name: 'Administrar', title: 'Administrar Productos', badge: 'new', component: 'components/Producto_administrar' }
     ]
   },

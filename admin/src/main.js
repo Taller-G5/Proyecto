@@ -8,8 +8,11 @@ import './theme/default.styl';
 import VeeValidate from 'vee-validate';
 import Truncate from 'lodash.truncate';
 import HighchartsVue from 'highcharts-vue'
-Vue.config.productionTip = false;
 // Helpers
+Vue.config.productionTip = false;
+Vue.config.devtools=false
+Vue.config.debug = false
+Vue.config.silent = true
 // Global filters
 Vue.filter('truncate', Truncate);
 Vue.use(HighchartsVue)

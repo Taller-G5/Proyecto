@@ -11,7 +11,7 @@
             <router-view></router-view>
           </div>   
            <!-- App Footer -->
-          <v-footer height="auto" class="white pa-3 app--footer">
+          <v-footer height="auto" class="indigo darken-4 white--text pa-3 app--footer">
             <v-spacer></v-spacer>
             <span class="caption">Sistema Farmacia &copy; {{ new Date().getFullYear() }}</span>
             <v-spacer></v-spacer>
@@ -21,6 +21,7 @@
         <app-fab></app-fab>
         <!-- theme setting -->      
       </v-app>
+      
     </template>
     <template v-else>
       <transition>
