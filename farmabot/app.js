@@ -43,7 +43,6 @@ app.post("/conversation",(req,res)=>{
                         image_url:productos.image_url
                     }
                 })
-                console.log(products)
                 return res.json({
                     fulfillmentMessages:[
                         {
@@ -90,7 +89,6 @@ app.post("/conversation",(req,res)=>{
                         image_url:productos.image_url
                     }
                 })
-                console.log(products)
                 return res.json({
                     fulfillmentMessages:[
                         {
