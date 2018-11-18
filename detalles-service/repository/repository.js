@@ -88,6 +88,7 @@ class Repository{
                         cantidad:detalles.cantidad,
                         total:detalles.total,
                         usuario:detalles.usuario,
+                        url:detalles.url,
                         fecha_venta:detalles.fecha_venta
                     }
                 }))

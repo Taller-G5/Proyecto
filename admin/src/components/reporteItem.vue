@@ -65,6 +65,10 @@ export default {
         disabled:false
         }
     },
+    mounted(){
+        let self = this
+        this.verifyUrl(self.detalle.url)
+    },
     methods:{
         generatepdf:function(id) {
             this.loading=true
@@ -80,6 +84,13 @@ export default {
             .catch(err=>{
                 console.log(err)
             })
+        },
+        verifyUrl:function(url){
+            if(url != null){
+                this.href = url
+                this.success=true
+                this.disabled=true;
+            }
         },
         openURL:function(){
             window.open(this.href,"_blank")
