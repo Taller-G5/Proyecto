@@ -112,6 +112,7 @@ class Repository{
                             cantidad:detalles.cantidad,
                             total:detalles.total,
                             usuario:detalles.usuario,
+                            url:detalles.url,
                             fecha_venta:detalles.fecha_venta
                         }
                     })
@@ -172,19 +173,24 @@ class Repository{
                         margin: 0 auto;
                         color: white;">Total: S/.${total}</h4>
                     </div>`
-                    pdf.create(contenido,options).toFile('./salida.pdf',(err,rs)=>{
-                        if(err){
-                            return reject(err)
-                        }
-                        else{
-                            cloudinary.v2.uploader.upload(rs.filename,(err,result)=>{
-                                resolve({
-                                    success:true,
-                                    pdf_url:result.url
+                    if(resp[0].url != null){
+                        return resolve({success:true,pdf_url:resp[0].url})
+                    }else{
+                        pdf.create(contenido,options).toFile('./salida.pdf',(err,rs)=>{
+                            if(err){
+                                return reject(err)
+                            }
+                            else{
+                                cloudinary.v2.uploader.upload(rs.filename,(err,result)=>{
+                                    this.connection.query(querys.set_url,[result.url,resp[0].num_venta],(err,result)=>{});
+                                    resolve({
+                                        success:true,
+                                        pdf_url:result.url
+                                    })
                                 })
-                            })
-                        }
-                    })
+                            }
+                        })
+                    }
                 }
             })
         })
