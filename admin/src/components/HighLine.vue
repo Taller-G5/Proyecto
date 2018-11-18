@@ -9,7 +9,7 @@
 <script>
 import highcharts from 'highcharts'
 export default {
-    props:['ventas','compras'],
+    props:['ventas','compras','type'],
     data(){
         return{
             title:'',
@@ -91,6 +91,8 @@ export default {
         this.chartOptions.xAxis.categories = labelsG
         this.chartOptions.series[0].data = totalVentas
         this.chartOptions.series[1].data = totalCompras
+        
+        
     },
     methods:{
         getlabelsV:function(array) {
@@ -125,6 +127,30 @@ export default {
                 
             }
             return total_array
+        },
+        getlabelsxMes:function(data){
+            let labels = []
+            let ventas = data
+            ventas.forEach(_venta=>{
+                let mes = _venta.fecha_venta.split("/")[1]
+                if(!labels.includes(mes))
+                    labels.push(mes)
+            })
+            return labels
+        },
+        getVentasxMes: function(data,labels){
+            let ventasT = 0
+            let total_ventas = []
+            let ventas = data
+            for(let index = 0;index<labels.length;index++){
+                ventas.forEach(_venta=>{
+                    if(_venta.fecha_venta.split("/")[1] == labels[index])
+                        ventasT+= _venta
+                })
+                total_ventas.push(num_ventas)
+                num_ventas=0
+            }
+            return total_ventas
         },
         sortLabels:function(labels){
             for(var i=0;i<labels.length;i++){

@@ -1,7 +1,15 @@
 <template>
   <v-container>
+    <v-flex xs12 sm6 md4>
+            <v-select
+                            :items="['Diario','Mensual']"
+                            v-model="tipo"
+                            label="Periodo"
+                            required
+                            ></v-select>
+        </v-flex>
     
-    <highline v-if="listoV && listoC" :ventas="ventas" :compras="compras"></highline>
+    <highline v-if="listoV && listoC" :ventas="ventas" :compras="compras" :type="tipo"></highline>
     
     <highpie v-if="listoP" :products="products"></highpie>
     
@@ -19,6 +27,7 @@ export default {
   },
   data(){
     return{
+      tipo :'',
       ventas:[],
       compras:[],
       products:[],
@@ -29,8 +38,8 @@ export default {
   },
   mounted(){
     this.getProducts()
-   this.getCompras()
-   this.getVentas() 
+    this.getCompras()
+    this.getVentas() 
   },
   computed: {
    
