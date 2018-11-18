@@ -38,7 +38,7 @@ export default {
             arreglo.forEach(element=>{
                 if(labels.includes(element.num_venta)){
                     let pos = this.getposicion(labels,element.num_venta)
-                    some[pos].values.push({producto:element.producto,precio:element.precio,cantidad:element.cantidad,total:element.total,usuario:element.usuario,fecha_venta:element.fecha_venta})
+                    some[pos].values.push({producto:element.producto,precio:element.precio,cantidad:element.cantidad,total:element.total,usuario:element.usuario,fecha_venta:element.fecha_venta,url:element.url})
                 }
             })
             return some;   
@@ -73,6 +73,7 @@ export default {
                          total_sum = item.total + total_sum
                          detalle.usuario = item.usuario
                          detalle.fecha_venta = item.fecha_venta
+                         detalle.url = item.url
                      })
                      detalle.total_sum = total_sum 
                  })
