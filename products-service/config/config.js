@@ -8,8 +8,8 @@ module.exports={
         port:3306
     },
     cloudStorage:{
-        cloudName:'axel123',
-        API_KEY:'367482552436946',
-        API_SECRET:'f6AOPFYkNcMXBqvsoohPgCMMpgE'
+        cloudName:'YOUR_CLOUD_NAME',
+        API_KEY:'YOUR_API_KEY',
+        API_SECRET:'YOUR_API_SECRET'
     }
 }
